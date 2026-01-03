@@ -1,172 +1,109 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vortex Links • Concluir</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vortex Links • Concluir</title>
 
-  <!-- ===== ESTILO ===== -->
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial,Helvetica,sans-serif
-    }
-
-    body{
-      background:radial-gradient(circle at top,#6a00ff,#12001f);
-      min-height:100vh;
-      color:#fff
-    }
-
-    .container{
-      max-width:800px;
-      margin:60px auto;
-      background:rgba(0,0,0,.55);
-      border-radius:16px;
-      padding:30px;
-      box-shadow:0 0 30px #9b4dff
-    }
-
-    h1{
-      text-align:center;
-      margin-bottom:20px;
-      color:#d6b3ff;
-      text-shadow:0 0 10px #a855ff
-    }
-
-    .box{
-      background:rgba(20,0,40,.8);
-      border-radius:14px;
-      padding:20px;
-      box-shadow:0 0 15px #7a2bff;
-      text-align:center
-    }
-
-    .fakead{
-      margin-top:10px;
-      padding:15px;
-      border-radius:12px;
-      background:#2a0055;
-      border:1px solid #8f3bff
-    }
-
-    .timer{
-      font-size:18px;
-      margin:15px 0;
-      color:#ffd6ff
-    }
-
-    .result{
-      word-break:break-all;
-      background:#140022;
-      padding:12px;
-      border-radius:10px;
-      border:1px dashed #9b4dff;
-      margin-bottom:15px
-    }
-
-    button{
-      width:100%;
-      padding:14px;
-      margin-top:10px;
-      border-radius:10px;
-      border:none;
-      font-size:15px;
-      font-weight:bold;
-      cursor:pointer;
-      color:#fff;
-      background:linear-gradient(45deg,#8f3bff,#c77dff);
-      box-shadow:0 0 15px #9b4dff;
-      display:none
-    }
-
-    button:hover{
-      filter:brightness(1.15)
-    }
-
-    .footer{
-      text-align:center;
-      margin-top:15px;
-      font-size:14px;
-      color:#e0ccff
-    }
-  </style>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+body{background:radial-gradient(circle at top,#6a00ff,#12001f);min-height:100vh;color:#fff}
+.container{max-width:800px;margin:60px auto;background:rgba(0,0,0,.55);border-radius:16px;padding:30px;box-shadow:0 0 30px #9b4dff}
+h1{text-align:center;margin-bottom:20px;color:#d6b3ff;text-shadow:0 0 10px #a855ff}
+.box{background:rgba(20,0,40,.8);border-radius:14px;padding:20px;box-shadow:0 0 15px #7a2bff;text-align:center}
+.fakead{margin-top:10px;padding:15px;border-radius:12px;background:#2a0055;border:1px solid #8f3bff}
+.timer{font-size:18px;margin:15px 0;color:#ffd6ff}
+.result{word-break:break-all;background:#140022;padding:12px;border-radius:10px;border:1px dashed #9b4dff;margin-bottom:15px}
+button{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border-radius:10px;
+  border:none;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  color:#fff;
+  background:linear-gradient(45deg,#8f3bff,#c77dff);
+  box-shadow:0 0 15px #9b4dff;
+  display:none
+}
+button:hover{filter:brightness(1.15)}
+.footer{text-align:center;margin-top:15px;font-size:14px;color:#e0ccff}
+</style>
 </head>
 
 <body>
+<div class="container">
+<h1>DESBLOQUEANDO LINK</h1>
 
-  <!-- ===== CONTAINER ===== -->
-  <div class="container">
-    <h1>DESBLOQUEANDO LINK</h1>
+<div class="box">
+  <div class="fakead">📢 Anúncio • Aguarde para continuar</div>
+  <div class="timer">Aguarde <span id="t">5</span>s...</div>
+  <div class="result" id="res"></div>
+  <button id="subscribe">🔔 Inscrever-se</button>
+  <button id="baixar">⬇️ Baixar</button>
+</div>
 
-    <div class="box">
-      <div class="fakead">📢 Anúncio • Aguarde para continuar</div>
+<div class="footer">Cliques: <span id="c">0</span> • dev: vortex</div>
+</div>
 
-      <div class="timer">
-        Aguarde <span id="t">5</span>s...
-      </div>
+<script>
+/* ===== BASE64 URL SAFE ===== */
+function base64Decode(str){
+  str = str.replace(/-/g,'+').replace(/_/g,'/');
+  return decodeURIComponent(escape(atob(str)));
+}
 
-      <div class="result" id="res"></div>
+/* ===== VARIÁVEIS ===== */
+let clicks = 0;
+let time = 5;
 
-      <button id="subscribe">🔔 Inscrever-se</button>
-      <button id="baixar">⬇️ Baixar</button>
-    </div>
+const cEl = document.getElementById('c');
+const tEl = document.getElementById('t');
+const resEl = document.getElementById('res');
+const btnBaixar = document.getElementById('baixar');
+const btnSub = document.getElementById('subscribe');
 
-    <div class="footer">
-      Cliques: <span id="c">0</span> • dev: vortex
-    </div>
-  </div>
+/* ===== PEGAR HASH ===== */
+const hash = location.hash.substring(1).split('|');
 
-  <!-- ===== SCRIPT ===== -->
-  <script>
-    /* -------- VARIÁVEIS -------- */
-    let clicks = 0;
-    let time = 5;
+let realLink = "";
+let canalLink = "";
 
-    const cEl = document.getElementById('c');
-    const tEl = document.getElementById('t');
-    const btnBaixar = document.getElementById('baixar');
-    const btnSub = document.getElementById('subscribe');
-    const resEl = document.getElementById('res');
+try{
+  if(hash[0]) realLink = base64Decode(hash[0]);
+  if(hash[1]) canalLink = base64Decode(hash[1]);
+}catch(e){}
 
-    /* -------- PEGAR HASH -------- */
-    const hashParts = location.hash.substring(1).split('|');
+resEl.textContent = location.href;
 
-    let realLink = "";
-    let canalLink = "";
+/* ===== CONTADOR ===== */
+const interval = setInterval(()=>{
+  time--;
+  tEl.textContent = time;
 
-    try{
-      realLink = atob(hashParts[0]);
-      if(hashParts[1]) canalLink = atob(hashParts[1]);
-    }catch(e){}
+  if(time <= 0){
+    clearInterval(interval);
+    btnBaixar.style.display = 'block';
+    if(canalLink) btnSub.style.display = 'block';
+  }
+},1000);
 
-    resEl.textContent = location.href;
+/* ===== AÇÕES ===== */
+btnSub.onclick = () => {
+  if(canalLink) window.open(canalLink,'_blank');
+};
 
-    /* -------- CONTADOR -------- */
-    const interval = setInterval(() => {
-      time--;
-      tEl.textContent = time;
-
-      if(time <= 0){
-        clearInterval(interval);
-        btnBaixar.style.display = 'block';
-        if(canalLink) btnSub.style.display = 'block';
-      }
-    }, 1000);
-
-    /* -------- AÇÕES -------- */
-    btnSub.onclick = () => {
-      if(canalLink) window.open(canalLink, '_blank');
-    };
-
-    btnBaixar.onclick = () => {
-      clicks++;
-      cEl.textContent = clicks;
-      window.location.href = realLink;
-    };
-  </script>
-
+btnBaixar.onclick = () => {
+  if(!realLink){
+    alert("Link inválido");
+    return;
+  }
+  clicks++;
+  cEl.textContent = clicks;
+  window.location.href = realLink;
+};
+</script>
 </body>
 </html>
