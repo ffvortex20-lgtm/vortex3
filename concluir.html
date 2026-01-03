@@ -4,53 +4,102 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vortex Links • Concluir</title>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
-body{background:radial-gradient(circle at top,#6a00ff,#12001f);min-height:100vh;color:#fff}
+body{background:radial-gradient(circle at top,#6a00ff,#12001f);min-height:200vh;color:#fff}
 .container{max-width:800px;margin:60px auto;background:rgba(0,0,0,.55);border-radius:16px;padding:30px;box-shadow:0 0 30px #9b4dff}
 h1{text-align:center;margin-bottom:20px;color:#d6b3ff;text-shadow:0 0 10px #a855ff}
 .box{background:rgba(20,0,40,.8);border-radius:14px;padding:20px;box-shadow:0 0 15px #7a2bff;text-align:center}
-.result{word-break:break-all;background:#140022;padding:12px;border-radius:10px;border:1px dashed #9b4dff;margin-bottom:15px}
+.videoBox{margin-top:10px;border-radius:12px;overflow:hidden}
+.videoBox iframe,.videoBox video{width:100%;height:300px;border:none}
 .timer{font-size:18px;margin:15px 0;color:#ffd6ff}
-button{width:100%;padding:14px;margin-top:10px;border-radius:10px;border:none;font-size:15px;font-weight:bold;cursor:pointer;color:#fff;background:linear-gradient(45deg,#8f3bff,#c77dff);box-shadow:0 0 15px #9b4dff;display:none}
+.result{word-break:break-all;background:#140022;padding:12px;border-radius:10px;border:1px dashed #9b4dff;margin-bottom:15px}
+button{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border-radius:10px;
+  border:none;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  color:#fff;
+  background:linear-gradient(45deg,#8f3bff,#c77dff);
+  box-shadow:0 0 15px #9b4dff;
+  display:none
+}
 button:hover{filter:brightness(1.15)}
 .footer{text-align:center;margin-top:15px;font-size:14px;color:#e0ccff}
-.fakead{margin-top:20px;padding:15px;border-radius:12px;background:#2a0055;border:1px solid #8f3bff}
 </style>
 </head>
+
 <body>
 <div class="container">
 <h1>DESBLOQUEANDO LINK</h1>
+
 <div class="box">
-<div class="fakead">📢 Anúncio • Aguarde para continuar</div>
-<div class="timer">Aguarde <span id="t">5</span>s...</div>
-<div class="result" id="res"></div>
-<button id="baixar">Continuar</button>
+  <div class="videoBox" id="videoBox"></div>
+  <div class="timer">Aguarde <span id="t">5</span>s...</div>
+  <div class="result" id="res"></div>
+  <button id="subscribe">🔔 Inscrever-se</button>
+  <button id="baixar">⬇️ Baixar</button>
 </div>
+
 <div class="footer">Cliques: <span id="c">0</span> • dev: vortex</div>
 </div>
+
 <script>
-let clicks=0;
-const cEl=document.getElementById('c');
-const hash=location.hash.substring(1);
-let real='';
-try{ real=atob(hash); }catch(e){}
-document.getElementById('res').textContent=location.href;
-let time=5;
-const tEl=document.getElementById('t');
-const btn=document.getElementById('baixar');
-const interval=setInterval(()=>{
-time--;
-tEl.textContent=time;
-if(time<=0){
-clearInterval(interval);
-btn.style.display='block';
+function decode(str){
+  str = str.replace(/-/g,'+').replace(/_/g,'/');
+  return atob(str);
 }
+
+/* ===== PEGAR DADOS ===== */
+const parts = location.hash.substring(1).split('|');
+let link="", canal="", video="";
+
+try{
+  if(parts[0]) link = decode(parts[0]);
+  if(parts[1]) canal = decode(parts[1]);
+  if(parts[2]) video = decode(parts[2]);
+}catch(e){}
+
+/* ===== MOSTRAR VÍDEO ===== */
+const box = document.getElementById('videoBox');
+
+if(video.includes("youtube")){
+  const id = video.split("v=")[1];
+  box.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1"></iframe>`;
+}else if(video){
+  box.innerHTML = `<video src="${video}" autoplay muted loop></video>`;
+}
+
+/* ===== AUTO SCROLL ===== */
+setInterval(()=>window.scrollBy(0,1),30);
+
+/* ===== TIMER ===== */
+let time=5, clicks=0;
+const t=document.getElementById('t');
+const c=document.getElementById('c');
+const baixar=document.getElementById('baixar');
+const sub=document.getElementById('subscribe');
+
+const interval=setInterval(()=>{
+  time--;
+  t.textContent=time;
+  if(time<=0){
+    clearInterval(interval);
+    baixar.style.display='block';
+    if(canal) sub.style.display='block';
+  }
 },1000);
-btn.onclick=()=>{
-clicks++;
-cEl.textContent=clicks;
-window.location.href=real;
+
+sub.onclick=()=>canal&&window.open(canal,'_blank');
+baixar.onclick=()=>{
+  clicks++;
+  c.textContent=clicks;
+  location.href=link.startsWith("http")?link:"https://"+link;
 };
 </script>
 </body>
