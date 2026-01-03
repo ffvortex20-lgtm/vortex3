@@ -24,7 +24,7 @@ button{
   color:#fff;
   background:linear-gradient(45deg,#8f3bff,#c77dff);
   box-shadow:0 0 15px #9b4dff;
-  display:none;
+  display:none
 }
 button:hover{filter:brightness(1.15)}
 .footer{text-align:center;margin-top:15px;font-size:14px;color:#e0ccff}
@@ -36,29 +36,39 @@ button:hover{filter:brightness(1.15)}
 <h1>GERAR LINK</h1>
 
 <div class="box">
-<input type="text" id="link" placeholder="Cole o link aqui">
-<input type="text" id="canal" placeholder="Link do canal (YouTube, etc)">
-<button id="enviar">Enviar</button>
+  <input type="text" id="link" placeholder="Cole o link aqui">
+  <input type="text" id="canal" placeholder="Link do canal (opcional)">
+  <button id="enviar">Enviar</button>
 </div>
 
 <div class="footer">dev: vortex</div>
 </div>
 
 <script>
-const inputLink = document.getElementById('link');
-const inputCanal = document.getElementById('canal');
-const btn = document.getElementById('enviar');
-
-function check(){
-  btn.style.display = inputLink.value.trim() ? 'block' : 'none';
+/* ===== BASE64 URL SAFE ===== */
+function base64Encode(str){
+  return btoa(unescape(encodeURIComponent(str)))
+    .replace(/\+/g,'-')
+    .replace(/\//g,'_')
+    .replace(/=+$/,'');
 }
 
+/* ===== ELEMENTOS ===== */
+const inputLink = document.getElementById('link');
+const inputCanal = document.getElementById('canal');
+const btnEnviar = document.getElementById('enviar');
+
+/* ===== MOSTRAR BOTÃO ===== */
+function check(){
+  btnEnviar.style.display = inputLink.value.trim() ? 'block' : 'none';
+}
 inputLink.oninput = check;
 inputCanal.oninput = check;
 
-btn.onclick = () => {
-  const real = btoa(inputLink.value.trim());
-  const canal = btoa(inputCanal.value.trim() || "");
+/* ===== ENVIAR ===== */
+btnEnviar.onclick = () => {
+  const real = base64Encode(inputLink.value.trim());
+  const canal = base64Encode(inputCanal.value.trim() || "");
   window.location.href = "concluir.html#" + real + "|" + canal;
 };
 </script>
