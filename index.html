@@ -1,68 +1,46 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vortex Links</title>
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
-body{background:radial-gradient(circle at top,#6a00ff,#12001f);min-height:100vh;color:#fff}
-.container{max-width:700px;margin:80px auto;background:rgba(0,0,0,.55);border-radius:16px;padding:30px;box-shadow:0 0 30px #9b4dff}
-h1{text-align:center;margin-bottom:20px;color:#d6b3ff;text-shadow:0 0 10px #a855ff}
-.box{background:rgba(20,0,40,.8);border-radius:14px;padding:20px;box-shadow:0 0 15px #7a2bff;text-align:center}
-input{width:100%;padding:14px;border-radius:10px;border:none;margin-bottom:12px;font-size:15px}
-button{
-  width:100%;
-  padding:14px;
-  margin-top:10px;
-  border-radius:10px;
-  border:none;
-  font-size:15px;
-  font-weight:bold;
-  cursor:pointer;
-  color:#fff;
-  background:linear-gradient(45deg,#8f3bff,#c77dff);
-  box-shadow:0 0 15px #9b4dff;
-  display:none
-}
-button:hover{filter:brightness(1.15)}
-.footer{text-align:center;margin-top:15px;font-size:14px;color:#e0ccff}
+.footer{text-align:center;margin-top:20px;font-size:14px;color:#e0ccff}
 </style>
 </head>
-
 <body>
+<canvas id="particles"></canvas>
 <div class="container">
-<h1>GERAR LINK</h1>
-
+<h1>VORTEX LINKS</h1>
 <div class="box">
-  <input id="link" placeholder="Link de download">
-  <input id="canal" placeholder="Link do canal (opcional)">
-  <input id="video" placeholder="Link do vídeo (YouTube ou MP4)">
-  <button id="enviar">Enviar</button>
+<input id="link" placeholder="Cole seu link (YouTube, TikTok, WhatsApp...)" />
+<button id="enviar">Enviar</button>
 </div>
-
 <div class="footer">dev: vortex</div>
 </div>
-
 <script>
-function encode(str){
-  return btoa(str).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-}
-
-const l = document.getElementById('link');
-const c = document.getElementById('canal');
-const v = document.getElementById('video');
-const btn = document.getElementById('enviar');
-
-l.oninput = () => btn.style.display = l.value.trim() ? 'block' : 'none';
-
-btn.onclick = () => {
-  const link = encode(l.value.trim());
-  const canal = encode(c.value.trim() || "");
-  const video = encode(v.value.trim() || "");
-  location.href = `concluir.html#${link}|${canal}|${video}`;
+const linkInput=document.getElementById('link');
+const btn=document.getElementById('enviar');
+linkInput.addEventListener('input',()=>{
+btn.style.display=linkInput.value.trim()?"block":"none";
+});
+btn.onclick=()=>{
+const link=linkInput.value.trim();
+if(!link) return;
+const code=btoa(link);
+window.location.href='concluir.html#'+code;
 };
+const c=document.getElementById('particles');
+const ctx=c.getContext('2d');
+let w,h,p=[];
+function resize(){w=c.width=innerWidth;h=c.height=innerHeight}
+window.onresize=resize;resize();
+for(let i=0;i<70;i++)p.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5),vy:(Math.random()-.5)});
+(function anim(){
+ctx.clearRect(0,0,w,h);
+ctx.fillStyle='#fff';
+p.forEach(o=>{
+o.x+=o.vx;o.y+=o.vy;
+if(o.x<0||o.x>w)o.vx*=-1;
+if(o.y<0||o.y>h)o.vy*=-1;
+ctx.fillRect(o.x,o.y,2,2);
+});
+requestAnimationFrame(anim);
+})();
 </script>
 </body>
 </html>
