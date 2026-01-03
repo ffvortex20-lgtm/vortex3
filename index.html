@@ -37,30 +37,29 @@ button:hover{filter:brightness(1.15)}
 
 <div class="box">
 <input type="text" id="link" placeholder="Cole o link aqui">
+<input type="text" id="canal" placeholder="Link do canal (YouTube, etc)">
 <button id="enviar">Enviar</button>
-<button id="subscribe">🔔 Inscreva-se no canal</button>
 </div>
 
 <div class="footer">dev: vortex</div>
 </div>
 
 <script>
-const input = document.getElementById('link');
+const inputLink = document.getElementById('link');
+const inputCanal = document.getElementById('canal');
 const btn = document.getElementById('enviar');
-const subBtn = document.getElementById('subscribe');
 
-input.oninput = () => {
-  btn.style.display = input.value.trim() ? 'block' : 'none';
-};
+function check(){
+  btn.style.display = inputLink.value.trim() ? 'block' : 'none';
+}
+
+inputLink.oninput = check;
+inputCanal.oninput = check;
 
 btn.onclick = () => {
-  const encoded = btoa(input.value.trim());
-  window.location.href = "concluir.html#" + encoded;
-};
-
-subBtn.style.display = 'block';
-subBtn.onclick = () => {
-  window.open("https://youtube.com/@SEUCANAL","_blank");
+  const real = btoa(inputLink.value.trim());
+  const canal = btoa(inputCanal.value.trim() || "");
+  window.location.href = "concluir.html#" + real + "|" + canal;
 };
 </script>
 </body>
