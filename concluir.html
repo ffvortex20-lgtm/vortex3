@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vortex Links • Concluir</title>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
 body{background:radial-gradient(circle at top,#6a00ff,#12001f);min-height:100vh;color:#fff}
@@ -24,15 +25,15 @@ button{
   color:#fff;
   background:linear-gradient(45deg,#8f3bff,#c77dff);
   box-shadow:0 0 15px #9b4dff;
-  display:none
+  display:none;
 }
 button:hover{filter:brightness(1.15)}
 .footer{text-align:center;margin-top:15px;font-size:14px;color:#e0ccff}
 .fakead{margin-top:20px;padding:15px;border-radius:12px;background:#2a0055;border:1px solid #8f3bff}
 </style>
 </head>
-<body>
 
+<body>
 <div class="container">
 <h1>DESBLOQUEANDO LINK</h1>
 
@@ -42,8 +43,8 @@ button:hover{filter:brightness(1.15)}
 
 <div class="result" id="res"></div>
 
-<button id="subscribe">🔔 Inscrever-se no canal</button>
-<button id="baixar">Continuar</button>
+<button id="subscribe">🔔 Inscrever-se</button>
+<button id="baixar">⬇️ Baixar</button>
 </div>
 
 <div class="footer">Cliques: <span id="c">0</span> • dev: vortex</div>
@@ -54,12 +55,11 @@ let clicks = 0;
 const cEl = document.getElementById('c');
 const hash = location.hash.substring(1);
 let real = '';
-
-try { real = atob(hash); } catch(e){}
+try{ real = atob(hash); }catch(e){}
 
 document.getElementById('res').textContent = location.href;
 
-const canalLink = "https://youtube.com/@SEUCANAL"; // 🔴 TROQUE AQUI
+const canalLink = "https://youtube.com/@SEUCANAL";
 
 let time = 5;
 const tEl = document.getElementById('t');
@@ -77,7 +77,7 @@ const interval = setInterval(()=>{
 },1000);
 
 btnSub.onclick = () => {
-  window.open(canalLink, '_blank');
+  window.open(canalLink,'_blank');
 };
 
 btnBaixar.onclick = () => {
@@ -86,6 +86,5 @@ btnBaixar.onclick = () => {
   window.location.href = real;
 };
 </script>
-
 </body>
 </html>
