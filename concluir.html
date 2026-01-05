@@ -65,7 +65,7 @@ button:hover{filter:brightness(1.15)}
   <button id="baixar">⬇️ Baixar</button>
 
 </div>
-//*cliques e quantidade*// 
+
 <div class="footer">Cliques: <span id="c">0</span> • dev: vortex</div>
 </div>
 
@@ -89,15 +89,17 @@ try{
 /* ===== MOSTRAR LINK ===== */
 document.getElementById('res').textContent = location.href;
 
-/* ===== MOSTRAR VÍDEO ===== */
+/* ===== MOSTRAR VÍDEO (CORRIGIDO) ===== */
 const box = document.getElementById('videoBox');
 
 function loadVideo(v){
   box.innerHTML = '';
   if(!v) return;
 
+  // YouTube (todos formatos)
   if(v.includes('youtube') || v.includes('youtu.be')){
     let id = '';
+
     if(v.includes('v=')){
       id = v.split('v=')[1].split('&')[0];
     }else if(v.includes('youtu.be/')){
@@ -106,13 +108,15 @@ function loadVideo(v){
 
     if(id){
       box.innerHTML = `
-        <iframe
+        <iframe 
           src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=1"
           allow="autoplay; encrypted-media"
           allowfullscreen>
         </iframe>`;
     }
-  }else{
+  }
+  // Vídeo direto (mp4, etc)
+  else{
     box.innerHTML = `
       <video src="${v}" autoplay muted loop controls></video>
     `;
@@ -125,8 +129,9 @@ loadVideo(video);
 setInterval(()=>window.scrollBy(0,1),30);
 
 /* ===== TIMER ===== */
-let time = 5;
+let time = 5, clicks = 0;
 const t = document.getElementById('t');
+const c = document.getElementById('c');
 const baixar = document.getElementById('baixar');
 const sub = document.getElementById('subscribe');
 
@@ -141,26 +146,14 @@ const interval = setInterval(()=>{
   }
 },1000);
 
-/* ===== CONTADOR REAL DE CLIQUES ===== */
-const c = document.getElementById('c');
-
-// carrega cliques salvos
-let clicks = localStorage.getItem('vortex_clicks');
-clicks = clicks ? parseInt(clicks) : 0;
-c.textContent = clicks;
-
 /* ===== BOTÕES ===== */
-sub.onclick = ()=>{
-  if(canal) window.open(canal,'_blank');
-};
+sub.onclick = ()=> canal && window.open(canal,'_blank');
 
 baixar.onclick = ()=>{
   clicks++;
   c.textContent = clicks;
-  localStorage.setItem('vortex_clicks', clicks);
-
-  window.location.href = link.startsWith('http')
-    ? link
-    : 'https://' + link;
+  window.location.href = link.startsWith('http') ? link : 'https://' + link;
 };
 </script>
+</body>
+</html>
